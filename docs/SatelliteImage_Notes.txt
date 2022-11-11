@@ -1,0 +1,96 @@
+
+Blogs and Research
+
+Satellite information
+https://www.satimagingcorp.com/satellite-sensors/worldview-2/
+
+Medium Blog on roof segmentation
+https://medium.com/omdena/using-deep-learning-to-classify-facility-rooftops-and-determine-solar-installation-potential-%EF%B8%8F-dd40913ce278
+https://medium.com/nam-r/deep-learning-for-roof-detection-in-aerial-images-in-3-minutes-8d845f6d7f25
+
+STAC json explanation
+https://stacspec.org/overview.html
+
+https://www.drivendata.co/blog/sgementing-buildings-benchmark/
+
+
+https://medium.com/the-downlinq/2nd-spacenet-competition-winners-code-release-c7473eea7c11
+https://medium.com/the-downlinq/the-spacenet-metric-612183cc2ddb
+https://medium.com/the-downlinq/object-detection-on-spacenet-5e691961d257#.5jgt1tqyx
+
+https://aws.amazon.com/blogs/machine-learning/extracting-buildings-and-roads-from-aws-open-data-using-amazon-sagemaker/
+
+Dataset
+https://spacenet.ai/las-vegas/ 
+https://spacenet.ai/spacenet-buildings-dataset-v2/
+https://registry.opendata.aws/spacenet/
+https://mlhub.earth/data/spacenet2
+
+Roof Slope
+https://www.sciencedirect.com/science/article/pii/S2666792421000494
+https://www.sciencedirect.com/science/article/pii/S0306261915002974#f0025
+https://www.sciencedirect.com/science/article/pii/S0960148117313009#fig2
+https://www.sciencedirect.com/science/article/pii/S030324342200006X
+https://www.sciencedirect.com/science/article/pii/S2666792421000494
+https://ui.adsabs.harvard.edu/abs/2021ISPAr43B3...55B/abstract
+
+Roof segmentation
+https://ieeexplore-ieee-org.libaccess.sjlibrary.org/document/8517854
+https://ieeexplore-ieee-org.libaccess.sjlibrary.org/document/9553424
+https://ieeexplore-ieee-org.libaccess.sjlibrary.org/document/9421765
+
+(Gooding et al., 2015)
+
+(Qian et al., 2022)
+
+(Mohajeri et al., 2017)
+
+
+Solar Energy (pySAM)
+https://sam.nrel.gov/software-development-kit-sdk.html
+https://nrel-pysam.readthedocs.io/en/master/modules/Pvwattsv8.html
+
+
+API docs
+
+Radiant ML Hub Python API doc
+https://radiant-mlhub.readthedocs.io/en/latest/getting_started.html#configuration
+
+Raster vision
+https://docs.rastervision.io/en/0.9/
+
+RasterIO for viewing Tiff files
+https://geobgu.xyz/py/rasterio.html
+https://rasterio.readthedocs.io/en/latest/topics/plotting.html
+https://gis.stackexchange.com/questions/346895/create-a-new-raster-tiff-file-which-is-masked-based-on-the-geojson-file
+
+
+GitHUBs
+https://github.com/drivendataorg/open-cities-ai-challenge/tree/master
+https://github.com/drivendataorg/open-ai-caribbean/
+https://github.com/azavea/raster-vision-examples
+https://github.com/radiantearth/stac-spec
+https://github.com/S2Looking/Dataset
+https://github.com/azavea/raster-vision-examples/tree/master/notebooks/spacenet
+
+
+https://github.com/aws-samples/aws-open-data-satellite-lidar-tutorial
+
+
+Livermore temple
+2nd and 4th Saturday 1-3pm 
+
+
+
+Weather Data Cleaning and Preprocessing:
+Create new column by combining Hour-Minutes = (hour + minutes)/60
+Drop Minutes
+Perform EDA
+Calculate correlation between GHI and other features, keep strongly correlated features discard rest.(Some feature might show strong/weak corelation according to season)
+#Split NSRDB data into Weather(all column except GHI) and Solar(only GHI) - Data preparation for ML
+Perform normalization on weather data (0 to 1) - ML 
+#Bind normalize weather and solar data  - New columns from normalization -ML 
+Cloud type is categorical features however its value are in numeric so convert the “cloud type” values into categorical features - ML
+
+
+
