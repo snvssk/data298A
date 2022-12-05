@@ -1,22 +1,33 @@
 #BigQuery Client
+import json
 project_id = 'data298-347103'
-client = bigquery.Client(credentials= credentials,project=project_id)
+client = bigquery.Client(project=project_id)
 #BigQuery Lookup for Address
-insert_sql = """INSERT INTO `data298-347103.Reporting.ModelPerformance` 
-                           VALUES(current_timestamp(), @model_config,@model_name,@target_objective,@Iteration,@Epoch,@training_metrics,@testing_metrics,@execution_time,@GitHub_link)"""
+insert_sql = """INSERT INTO `data298-347103.projectReports.ModelPerformanceResults` 
+                           VALUES(current_timestamp(), @model_config,@model_name,@target_objective,@iteration,@epoch,@training_metrics,@validation_metrics,@execution_time,@github_link,)"""
 
+metrics_results = json.loads(hist_df.to_json())
+print(type(metrics_results))
 
-job_config = bigquery.QueryJobConfig(
-query_parameters=[
-    bigquery.ScalarQueryParameter("model_config", "JSON", model_config),
-    bigquery.ScalarQueryParameter("model_name", "STRING", 'ANN'),
-    bigquery.ScalarQueryParameter("target_objective", "STRING", 'SolarEnergyEstimation'),
-    bigquery.ScalarQueryParameter("Iteration", "INTEGER", 0),
-    bigquery.ScalarQueryParameter("Epoch", "INTEGER", epoch_number),
-    bigquery.ScalarQueryParameter("training_metrics", "JSON", training_metrics),
-    bigquery.ScalarQueryParameter("execution_time", "INTEGER", 'SolarEnergyEstimation'),
-    bigquery.ScalarQueryParameter('GitHub_link',STRING,'https://github.com/snvssk/data298A/blob/main/SolarEnergy/MLModels/ANN.ipynb')
-]
-)
-        
-insert_result = client.query(insert_sql,job_config=job_config) 
+for i in range(0, 10):
+  epoch_number = i+1
+  idx = str(i)
+  #print(metrics_results[0])
+  training_metrics = {'loss':metrics_results['loss'][idx],'mae':metrics_results['mae'][idx],'root_mean_squared_error':metrics_results['root_mean_squared_error'][idx]}
+  validation_metrics = {'val_loss':metrics_results['val_loss'][idx],'val_mae':metrics_results['val_mae'][idx],'val_root_mean_squared_error':metrics_results['val_root_mean_squared_error'][idx] }
+  job_config = bigquery.QueryJobConfig(
+  query_parameters=[
+      bigquery.ScalarQueryParameter("model_config", "JSON", model.to_json()),
+      bigquery.ScalarQueryParameter("model_name", "STRING", 'ANN'),
+      bigquery.ScalarQueryParameter("target_objective", "STRING", 'SolarEnergyEstimation'),
+      bigquery.ScalarQueryParameter("iteration", "INTEGER", 0),
+      bigquery.ScalarQueryParameter("epoch", "INTEGER", epoch_number),
+      bigquery.ScalarQueryParameter("training_metrics", "JSON", training_metrics),
+      bigquery.ScalarQueryParameter("validation_metrics", "JSON", validation_metrics),
+      bigquery.ScalarQueryParameter("execution_time", "INTEGER", 0),
+      bigquery.ScalarQueryParameter('github_link','STRING','https://github.com/snvssk/data298A/blob/main/SolarEnergy/MLModels/ANN.ipynb')
+  ]
+  )
+          
+  insert_result = client.query(insert_sql,job_config=job_config) 
+  print(insert_result)
