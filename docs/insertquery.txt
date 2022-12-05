@@ -1,0 +1,22 @@
+#BigQuery Client
+project_id = 'data298-347103'
+client = bigquery.Client(credentials= credentials,project=project_id)
+#BigQuery Lookup for Address
+insert_sql = """INSERT INTO `data298-347103.Reporting.ModelPerformance` 
+                           VALUES(current_timestamp(), @model_config,@model_name,@target_objective,@Iteration,@Epoch,@training_metrics,@testing_metrics,@execution_time,@GitHub_link)"""
+
+
+job_config = bigquery.QueryJobConfig(
+query_parameters=[
+    bigquery.ScalarQueryParameter("model_config", "JSON", model_config),
+    bigquery.ScalarQueryParameter("model_name", "STRING", 'ANN'),
+    bigquery.ScalarQueryParameter("target_objective", "STRING", 'SolarEnergyEstimation'),
+    bigquery.ScalarQueryParameter("Iteration", "INTEGER", 0),
+    bigquery.ScalarQueryParameter("Epoch", "INTEGER", epoch_number),
+    bigquery.ScalarQueryParameter("training_metrics", "JSON", training_metrics),
+    bigquery.ScalarQueryParameter("execution_time", "INTEGER", 'SolarEnergyEstimation'),
+    bigquery.ScalarQueryParameter('GitHub_link',STRING,'https://github.com/snvssk/data298A/blob/main/SolarEnergy/MLModels/ANN.ipynb')
+]
+)
+        
+insert_result = client.query(insert_sql,job_config=job_config) 
