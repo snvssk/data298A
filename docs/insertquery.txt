@@ -9,7 +9,7 @@ project_id = 'data298-347103'
 client = bigquery.Client(project=project_id)
 #BigQuery Lookup for Address
 insert_sql = """INSERT INTO `data298-347103.projectReports.ModelPerformanceResults` 
-                           VALUES(@datevalue, @model_config,@model_name,@target_objective,@iteration,@epoch,@training_metrics,@validation_metrics,@execution_time,@github_link)"""
+                           VALUES(current_timestamp(), @model_config,@model_name,@target_objective,@iteration,@epoch,@training_metrics,@validation_metrics,@execution_time,@github_link)"""
 
 hist_df = pd.DataFrame(history.history) 
 metrics_results = json.loads(hist_df.to_json())
@@ -25,7 +25,7 @@ for i in range(0, 100):
   #print(type(json.dumps(validation_metrics)))
   job_config = bigquery.QueryJobConfig(
   query_parameters=[
-      bigquery.ScalarQueryParameter("datevalue","TIMESTAMP",'2022-12-06 02:08:28.801628 UTC'),
+      #bigquery.ScalarQueryParameter("datevalue","TIMESTAMP",'2022-12-06 02:08:28.801628 UTC'),
       bigquery.ScalarQueryParameter("model_config", "JSON", model.to_json()),
       bigquery.ScalarQueryParameter("model_name", "STRING", 'ANN'),
       bigquery.ScalarQueryParameter("target_objective", "STRING", 'SolarEnergyEstimation'),
