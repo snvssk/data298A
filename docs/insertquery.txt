@@ -1,0 +1,46 @@
+from google.colab import auth
+auth.authenticate_user()
+print('Authenticated')
+
+#BigQuery Client
+import json
+from pprint import pprint
+project_id = 'data298-347103'
+client = bigquery.Client(project=project_id)
+#BigQuery Lookup for Address
+insert_sql = """INSERT INTO `data298-347103.projectReports.ModelPerformanceResults` 
+                           VALUES(current_timestamp(), @model_config,@model_name,@target_objective,@iteration,@epoch,@training_metrics,@validation_metrics,@execution_time,@github_link)"""
+
+hist_df = pd.DataFrame(history.history) 
+metrics_results = json.loads(hist_df.to_json())
+print(type(metrics_results))
+
+for i in range(0, 100):
+  epoch_number = i+1
+  idx = str(i)
+  #print(metrics_results[0])
+  training_metrics = {'loss':metrics_results['loss'][idx],'mae':metrics_results['mae'][idx],'root_mean_squared_error':metrics_results['root_mean_squared_error'][idx]}
+  validation_metrics = {'val_loss':metrics_results['val_loss'][idx],'val_mae':metrics_results['val_mae'][idx],'val_root_mean_squared_error':metrics_results['val_root_mean_squared_error'][idx] }
+  #print(type(json.dumps(training_metrics)))
+  #print(type(json.dumps(validation_metrics)))
+  job_config = bigquery.QueryJobConfig(
+  query_parameters=[
+      #bigquery.ScalarQueryParameter("datevalue","TIMESTAMP",'2022-12-06 02:08:28.801628 UTC'),
+      bigquery.ScalarQueryParameter("model_config", "JSON", model.to_json()),
+      bigquery.ScalarQueryParameter("model_name", "STRING", 'ANN'),
+      bigquery.ScalarQueryParameter("target_objective", "STRING", 'SolarEnergyEstimation'),
+      bigquery.ScalarQueryParameter("iteration", "INTEGER", 0),
+      bigquery.ScalarQueryParameter("epoch", "INTEGER", epoch_number),
+      bigquery.ScalarQueryParameter("training_metrics", "JSON", json.dumps(training_metrics)),
+      bigquery.ScalarQueryParameter("validation_metrics", "JSON", json.dumps(validation_metrics)),
+      bigquery.ScalarQueryParameter("execution_time", "INTEGER", 0),
+      bigquery.ScalarQueryParameter('github_link','STRING','https://github.com/snvssk/data298A/blob/main/SolarEnergy/MLModels/ANN.ipynb')
+  ]
+  )
+  #print(insert_sql)       
+  insert_result = client.query(insert_sql,job_config=job_config) 
+  #print(insert_result)
+  
+  #pprint(vars(insert_result))
+  #print(insert_result.query['query'])
+  print(insert_result.errors)
